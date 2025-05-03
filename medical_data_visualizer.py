@@ -7,7 +7,7 @@ import numpy as np
 df = pd.read_csv('medical_examination.csv')
 
 # 2
-df['overweight'] = ((df['weight'] / df['height']**2) > 25).astype(int)
+df['overweight'] = ((df['weight'] / (df['height'] / 100 )**2) > 25).astype(int)
 
 # 3
 df['cholesterol'] = (df['cholesterol'] > 1).astype(int)
@@ -20,9 +20,7 @@ def draw_cat_plot():
 
     # 6
     df_cat_grouped = df_cat.groupby(['cardio', 'variable', 'value']).size().reset_index(name = 'total')
-
     # 7
-    print(df_cat_grouped)
     # 8
     fig = sns.catplot(
         data=df_cat_grouped, x="variable", y="total", col="cardio",
@@ -32,8 +30,6 @@ def draw_cat_plot():
     # 9
     fig.savefig('catplot.png')
     return fig
-
-
 # 10
 def draw_heat_map():
     # 11
@@ -43,14 +39,14 @@ def draw_heat_map():
     df_heat = df_heat[df['weight'] >= df['weight'].quantile(0.025)]
     df_heat = df_heat[df['weight'] <= df['weight'].quantile(0.975)]
     # 12
-    corr = df_heat.corr().round(1)
+    corr = df_heat.corr()
     # 13
     mask = np.triu(np.ones_like(corr, dtype=bool))
     # 14
     fig, ax = plt.subplots(figsize=(16, 16))
 
     # 15
-    sns.heatmap(corr, mask=mask, vmin=-0.08, vmax=0.24, center=0,
+    sns.heatmap(corr, mask=mask, vmin=-0.08, vmax=0.24, center=0, fmt=".1f",
         square=True, linewidths=.5, cbar_kws={"shrink": 0.7}, annot=True )
     # 16
     fig.savefig('heatmap.png')

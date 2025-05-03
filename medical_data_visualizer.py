@@ -39,11 +39,11 @@ def draw_heat_map():
     # 11
     df_heat = df[df['ap_lo'] <= df['ap_hi']]
     df_heat = df_heat[df['height'] >= df['height'].quantile(0.025)]
-    df_heat = df_heat[df['height'] <= df['height'].quantile(0.0975)]
+    df_heat = df_heat[df['height'] <= df['height'].quantile(0.975)]
     df_heat = df_heat[df['weight'] >= df['weight'].quantile(0.025)]
-    df_heat = df_heat[df['weight'] <= df['weight'].quantile(0.0975)]
+    df_heat = df_heat[df['weight'] <= df['weight'].quantile(0.975)]
     # 12
-    corr = df_heat.corr()
+    corr = df_heat.corr().round(1)
     # 13
     mask = np.triu(np.ones_like(corr, dtype=bool))
     # 14
